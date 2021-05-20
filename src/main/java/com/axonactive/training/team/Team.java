@@ -2,7 +2,6 @@ package com.axonactive.training.team;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.axonactive.training.company.Company;
 import com.axonactive.training.company.Player;
 import lombok.AllArgsConstructor;
@@ -16,7 +15,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class Team {
 
-    private final int MAX_TEAM_SIZE = 4;
+    private final int MAX_TEAM_SIZE = 12;
 
     private static Long autoId = 100000000L;
 
@@ -47,15 +46,19 @@ public class Team {
         this.players.add(newPlayer);
     }
 
-    private Boolean isValidPlayer(Player emloyee){
+    public Boolean isValidPlayer(Player emloyee){
         return emloyee.getWorkAt().getId() == this.representOfCompany.getId();
     }
 
-    private Boolean isValidNumberOfPlayer(){
+    public Boolean isValidNumberOfPlayer(){
         return this.players.size() < this.MAX_TEAM_SIZE;
     }
 
     public int getSize() {
+        if(this.players == null)
+        {
+            throw new IllegalAccessError("The players is null");
+        }
         return this.players.size();
     }
 }

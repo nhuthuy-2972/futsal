@@ -1,0 +1,197 @@
+package com.axonactive.training.tour;
+
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+
+import com.axonactive.training.company.Company;
+import com.axonactive.training.company.Gender;
+import com.axonactive.training.company.Player;
+import com.axonactive.training.team.Team;
+
+import org.junit.jupiter.api.Test;
+
+public class TournamentTest {
+    @Test
+    public void addPlayerwhenNumberOfPlayerLessThanTeamSizeThenItDoesNotThrow()
+    {
+        Company testCompany1 = new Company("Test");
+        Team team = new Team("Test Team", testCompany1);
+        Player player1 = new Player("nhut huy",Gender.FEMALE,testCompany1);
+        team.addPlayer(player1);
+        team.addPlayer(player1);
+        team.addPlayer(player1);
+        team.addPlayer(player1);
+        team.addPlayer(player1);
+        team.addPlayer(player1);
+        team.addPlayer(player1);
+        team.addPlayer(player1);
+        Tournament tour = new Tournament();
+        assertDoesNotThrow(()->tour.addTeam(team));
+    }
+
+    @Test
+    public void addPlayerwhenNumberOfPlayerMoreThanTeamSizeThenItThrowIllegalAccessError()
+    {
+        Company testCompany1 = new Company("Test");
+        Team team = new Team("Test Team", testCompany1);
+        Player player1 = new Player("nhut huy",Gender.FEMALE,testCompany1);
+        List<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        team.setPlayers(players);
+        Tournament tour = new Tournament();
+        assertThrows(IllegalAccessError.class,()->tour.addTeam(team));
+    }
+
+    @Test
+    public void whenNumberOfPlayerMoreThanTeamSizeThenItReturnFalse()
+    {
+        Company testCompany1 = new Company("Test");
+        Team team = new Team("Test Team", testCompany1);
+        Player player1 = new Player("nhut huy",Gender.FEMALE,testCompany1);
+        List<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        team.setPlayers(players);
+        Tournament tour =  new Tournament();
+        Boolean result = tour.isValidTeam(team);
+        assertFalse(result);
+        // assertThrows(ArithmeticException.class, ()->team.addPlayer(new Player("Nhut Huy", Gender.MALE, testCompany1)));
+    }
+
+    @Test
+    public void whenNumberOfPlayerLessThanTeamSizeThenItReturnFalse()
+    {
+        Company testCompany1 = new Company("Test");
+        Team team = new Team("Test Team", testCompany1);
+        Player player1 = new Player("nhut huy",Gender.FEMALE,testCompany1);
+        List<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        team.setPlayers(players);
+        Tournament tour =  new Tournament();
+        Boolean result = tour.isValidTeam(team);
+        assertFalse(result);
+        // assertThrows(ArithmeticException.class, ()->team.addPlayer(new Player("Nhut Huy", Gender.MALE, testCompany1)));
+    }
+
+    @Test
+    public void whenNumberOfPlayerInTeamSizeThenItReturnTrue()
+    {
+        Company testCompany1 = new Company("Test");
+        Team team = new Team("Test Team", testCompany1);
+        Player player1 = new Player("nhut huy",Gender.FEMALE,testCompany1);
+        List<Player> players = new ArrayList<>();
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        players.add(player1);
+        team.setPlayers(players);
+        Tournament tour =  new Tournament();
+        Boolean result = tour.isValidTeam(team);
+        assertTrue(result);
+        // assertThrows(ArithmeticException.class, ()->team.addPlayer(new Player("Nhut Huy", Gender.MALE, testCompany1)));
+    }
+
+    @Test
+    public void generateScheduleMatchOddTest()
+    {
+        List<Company> companies = new ArrayList<>();
+        companies.add(new Company("Axon Active"));
+        companies.add(new Company("FPT"));
+        companies.add(new Company("BOSCH"));
+        companies.add(new Company("VNG"));
+        companies.add(new Company("TMA"));
+        List<Team> Teams = new LinkedList<>();
+
+        Team AxonTeam = new Team("Axon-Active", companies.get(0));
+        Team FPTeam = new Team("FPT-CT", companies.get(1));
+        Team BoschTeam = new Team("Bosch", companies.get(2));
+        Team VNGTeam = new Team("VNG-FC", companies.get(3));
+        Team TMATeam = new Team("TMA-HCM", companies.get(4));
+     
+        System.out.println(AxonTeam.getSize());
+        Teams.add(AxonTeam);
+        Teams.add(FPTeam);
+        Teams.add(BoschTeam);
+        Teams.add(VNGTeam);
+        Teams.add(TMATeam);
+
+
+        Tournament tournament = new Tournament(Teams);
+        // tournament.addTeam(AxonTeam);
+        tournament.generateScheduleMatch();
+        assertDoesNotThrow(()->tournament.generateScheduleMatch());
+    }
+    @Test
+    public void generateScheduleMatchEvenTest()
+    {
+        List<Company> companies = new ArrayList<>();
+        companies.add(new Company("Axon Active"));
+        companies.add(new Company("FPT"));
+        companies.add(new Company("BOSCH"));
+        companies.add(new Company("VNG"));
+        companies.add(new Company("TMA"));
+        companies.add(new Company("CUSC"));
+        List<Team> Teams = new LinkedList<>();
+
+        Team AxonTeam = new Team("Axon-Active", companies.get(0));
+        Team FPTeam = new Team("FPT-CT", companies.get(1));
+        Team BoschTeam = new Team("Bosch", companies.get(2));
+        Team VNGTeam = new Team("VNG-FC", companies.get(3));
+        Team TMATeam = new Team("TMA-HCM", companies.get(4));
+        Team CUSCTeam = new Team("CUSC-FC", companies.get(5));
+        System.out.println(AxonTeam.getSize());
+        Teams.add(AxonTeam);
+        Teams.add(FPTeam);
+        Teams.add(BoschTeam);
+        Teams.add(VNGTeam);
+        Teams.add(TMATeam);
+        Teams.add(CUSCTeam);
+
+        Tournament tournament = new Tournament(Teams);
+        // tournament.addTeam(AxonTeam);
+        tournament.generateScheduleMatch();
+        assertDoesNotThrow(()->tournament.generateScheduleMatch());
+    }
+}

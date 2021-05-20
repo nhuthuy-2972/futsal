@@ -1,5 +1,6 @@
 package com.axonactive.training.tour;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -15,7 +16,7 @@ import com.axonactive.training.team.Team;
 @AllArgsConstructor
 public class Tournament {
 
-    List<Team> Teams;
+    private List<Team> Teams = new LinkedList<>();
 
     public void addTeam(Team newTeam) {
         if(!isValidTeam(newTeam)) 
@@ -25,14 +26,18 @@ public class Tournament {
         this.Teams.add(newTeam);
     }
 
-    private boolean isValidTeam(Team team)
+    public boolean isValidTeam(Team team)
     {
-        return team.getPlayers().size() > 6 && team.getPlayers().size() < 8;
+        return team.getPlayers().size() > 6 && team.getPlayers().size() < 12;
     }
 
     public void generateScheduleMatch()
     {
-        Map<String, List<Match>> tournament = SchedualUtil.generateTuornament(this.Teams);
+        LinkedList<Team> cloneTeams = new LinkedList<>(this.Teams);
+        if (cloneTeams.size() % 2 != 0) {
+            cloneTeams.addFirst(new Team("OFF",null));
+        }
+        Map<String, List<Match>> tournament = SchedualUtil.generateTuornament(cloneTeams);
         Set<String> keys = tournament.keySet();
         for (String key : keys) {
             System.out.println(key + " -> " + tournament.get(key));

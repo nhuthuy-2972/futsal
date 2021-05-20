@@ -25,7 +25,6 @@ public class Player {
         this.id = autoId++;
         this.fullName = fullName;
         this.gender = gender;
-        // this.socialInsuranceId = socialInsuranceId;
         this.workAt = workAt;
     }
 

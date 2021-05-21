@@ -5,6 +5,7 @@ import java.util.List;
 import com.axonactive.training.company.Company;
 import com.axonactive.training.company.Player;
 import lombok.AllArgsConstructor;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,6 +14,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public class Team {
 
     private final int MAX_TEAM_SIZE = 12;

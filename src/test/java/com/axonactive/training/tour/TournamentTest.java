@@ -1,7 +1,6 @@
 package com.axonactive.training.tour;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -89,7 +88,6 @@ public class TournamentTest {
         Tournament tour =  new Tournament();
         Boolean result = tour.isValidTeam(team);
         assertFalse(result);
-        // assertThrows(ArithmeticException.class, ()->team.addPlayer(new Player("Nhut Huy", Gender.MALE, testCompany1)));
     }
 
     @Test
@@ -108,7 +106,6 @@ public class TournamentTest {
         Tournament tour =  new Tournament();
         Boolean result = tour.isValidTeam(team);
         assertFalse(result);
-        // assertThrows(ArithmeticException.class, ()->team.addPlayer(new Player("Nhut Huy", Gender.MALE, testCompany1)));
     }
 
     @Test
@@ -130,7 +127,6 @@ public class TournamentTest {
         Tournament tour =  new Tournament();
         Boolean result = tour.isValidTeam(team);
         assertTrue(result);
-        // assertThrows(ArithmeticException.class, ()->team.addPlayer(new Player("Nhut Huy", Gender.MALE, testCompany1)));
     }
 
     @Test
@@ -159,7 +155,6 @@ public class TournamentTest {
 
 
         Tournament tournament = new Tournament(Teams);
-        // tournament.addTeam(AxonTeam);
         tournament.generateScheduleMatch();
         assertDoesNotThrow(()->tournament.generateScheduleMatch());
     }
@@ -190,7 +185,6 @@ public class TournamentTest {
         Teams.add(CUSCTeam);
 
         Tournament tournament = new Tournament(Teams);
-        // tournament.addTeam(AxonTeam);
         tournament.generateScheduleMatch();
         assertDoesNotThrow(()->tournament.generateScheduleMatch());
     }

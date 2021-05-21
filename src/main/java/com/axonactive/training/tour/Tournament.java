@@ -34,10 +34,10 @@ public class Tournament {
     public void generateScheduleMatch()
     {
         LinkedList<Team> cloneTeams = new LinkedList<>(this.Teams);
-        if (cloneTeams.size() % 2 != 0) {
-            cloneTeams.addFirst(new Team("OFF",null));
-        }
-        Map<String, List<Match>> tournament = SchedualUtil.generateTuornament(cloneTeams);
+        // if (cloneTeams.size() % 2 != 0) {
+        //     cloneTeams.addFirst(new Team("OFF",null));
+        // }
+        Map<String, List<Match>> tournament = Schedule.generateTuornament(cloneTeams);
         Set<String> keys = tournament.keySet();
         for (String key : keys) {
             System.out.println(key + " -> " + tournament.get(key));

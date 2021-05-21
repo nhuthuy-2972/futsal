@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Map;
 import com.axonactive.training.team.Team;
 
-public class SchedualUtil{
-    public static void rotateList(LinkedList<Team> a) {
+public class Schedule{
+    public static void rotateTeamList(LinkedList<Team> a) {
         Team firstElement = a.pollFirst();
         Team lastElememt = a.pollLast();
         a.addFirst(lastElememt);
@@ -30,11 +30,16 @@ public class SchedualUtil{
 
     public static Map<String, List<Match>> generateTuornament(List<Team> teams) {
         Map<String, List<Match>> tournamentRounds = new HashMap<>();
-        int rounds = teams.size() - 1;
         LinkedList<Team> p = new LinkedList<>(teams);
+        if(p.size() % 2 != 0)
+        {
+            p.addFirst(new Team("OFF",null));
+        }
+        int rounds = p.size() - 1;
+        
         for (int i = 0; i < rounds; i++) {
             tournamentRounds.put("Round" + (i + 1), matchParticipants(p));
-            rotateList(p);
+            rotateTeamList(p);
         }
         return tournamentRounds;
     }

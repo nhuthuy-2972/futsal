@@ -22,7 +22,7 @@ class Main{
         companies.add(new Company("BOSCH"));
         companies.add(new Company("VNG"));
         companies.add(new Company("TMA"));
-        // companies.add(new Company("CUSC"));
+        companies.add(new Company("CUSC"));
         List<Team> Teams = new LinkedList<>();
 
         Team AxonTeam = new Team("Axon-Active", companies.get(0));

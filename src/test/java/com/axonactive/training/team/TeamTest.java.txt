@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.axonactive.training.company.Company;
-import com.axonactive.training.company.Gender;
-import com.axonactive.training.company.Player;
+import com.axonactive.training.player.Gender;
+import com.axonactive.training.player.Player;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

@@ -10,8 +10,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.axonactive.training.company.Company;
-import com.axonactive.training.company.Gender;
-import com.axonactive.training.company.Player;
+import com.axonactive.training.player.Gender;
+import com.axonactive.training.player.Player;
 import com.axonactive.training.team.Team;
 
 import org.junit.jupiter.api.Test;

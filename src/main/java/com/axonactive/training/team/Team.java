@@ -2,8 +2,21 @@ package com.axonactive.training.team;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.axonactive.training.company.Company;
-import com.axonactive.training.company.Player;
+import java.util.Objects;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+
+import com.axonactive.training.player.Player;
+
 import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -15,45 +28,30 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode
+@Entity
+@Table(name = "tbl_team")
 public class Team {
 
-    private final int MAX_TEAM_SIZE = 12;
+    private final int MAX_TEAM_SIZE = 13;
 
-    private static Long autoId = 100000000L;
+    private final int MIN_TEAM_SIZE = 5;
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column
+    @NotNull
+    @Size(max = 50)
     private String name;
 
-    private Company representOfCompany;
-
+    @OneToMany
+    @JoinColumn(name = "player_id")
     private List<Player> players = new ArrayList<>();
-
-
-    public Team(String name, Company representOfCompany) {
-        this.id = autoId++;
-        this.name = name;
-        this.representOfCompany = representOfCompany;
-    }
     
-    public void addPlayer(Player newPlayer){
-        if(!isValidNumberOfPlayer())
-        {
-            throw new ArithmeticException("Maxinum of players");
-        }
-        else if(!isValidPlayer(newPlayer))
-        {
-            throw new ArithmeticException("Player must be working for that company");
-        }
-        this.players.add(newPlayer);
-    }
-
-    public Boolean isValidPlayer(Player emloyee){
-        return emloyee.getWorkAt().getId() == this.representOfCompany.getId();
-    }
-
     public Boolean isValidNumberOfPlayer(){
-        return this.players.size() < this.MAX_TEAM_SIZE;
+        int teamSize = this.players.size();
+        return teamSize < this.MAX_TEAM_SIZE && teamSize > this.MIN_TEAM_SIZE;
     }
 
     public int getSize() {
@@ -63,4 +61,10 @@ public class Team {
         }
         return this.players.size();
     }
+
+    
+    public boolean isValid() {
+        return Objects.nonNull(this.name)
+        &&this.isValidNumberOfPlayer();
+	}
 }

@@ -17,13 +17,12 @@ public class PlayerService {
         this.playerEntity.persist(newPlayer);
     }
 
-    public void update(Player newPlayer){
+    public void update(Long id ,Player newPlayer){
         validate(newPlayer);
-        if(newPlayer.getId() == null){
-            throw new IllegalArgumentException("Player id is missing");
+        Player persistedPlayer = this.playerEntity.find(Player.class, id);
+        if (Objects.isNull(persistedPlayer)){
+            throw new IllegalArgumentException("Player is not exits");
         }
-
-        Player persistedPlayer = this.playerEntity.find(Player.class, newPlayer.getId());
         persistedPlayer.updatePlayer(newPlayer);
         this.playerEntity.merge(persistedPlayer);
     }
@@ -42,7 +41,7 @@ public class PlayerService {
         return query.getResultList();
     }
 
-    public List<Player> findByInsuranceNumber(String insuranceNumber) {
+    public  List<Player> findByInsuranceNumber(String insuranceNumber) {
         TypedQuery<Player> query = this.playerEntity.createNamedQuery(Player.GET_BY_INSURANCE_NUMBER, Player.class);
         query.setParameter("playerInsuranceNumber", insuranceNumber);
         return query.getResultList();

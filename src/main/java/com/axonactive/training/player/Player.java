@@ -57,7 +57,7 @@ public class Player {
     @Column(name = "d_o_b", columnDefinition = "DATE")
     private LocalDate dob;
 
-    @Column(name = "socail_insurance_number" , nullable = false)
+    @Column(name = "socail_insurance_number" , nullable = false,unique = true)
     private String socialInsuranceNumber;
 
     @Convert(converter = GenderPersistenceConverter.class)
@@ -100,4 +100,6 @@ public class Player {
         &&StringUtils.isNotBlank(this.socialInsuranceNumber)
         &&Objects.nonNull(this.dob);
     }
+
+    
 }

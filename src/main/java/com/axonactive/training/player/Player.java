@@ -49,7 +49,7 @@ public class Player {
     private String idNumber;
     
     @Column(name = "first_name", length = 20, nullable = false)
-    private String fistName;
+    private String firstName;
 
     @Column(name = "last_name", length = 30, nullable = false)
     private String lastName;
@@ -66,7 +66,7 @@ public class Player {
     public Player(String idNumber, String fistName, String lastName, LocalDate dob, String socialInsuranceNumber,
             Gender gender ) {
         this.idNumber = idNumber;
-        this.fistName = fistName;
+        this.firstName = fistName;
         this.lastName = lastName;
         this.dob = dob;
         this.socialInsuranceNumber = socialInsuranceNumber;
@@ -74,7 +74,7 @@ public class Player {
     }
 
     public void updatePlayer(Player newPlayer){
-        this.fistName = newPlayer.fistName;
+        this.firstName = newPlayer.firstName;
         this.lastName = newPlayer.lastName;
         this.dob = newPlayer.dob;
         this.socialInsuranceNumber = newPlayer.socialInsuranceNumber;
@@ -91,15 +91,13 @@ public class Player {
     }
 
     public String getFullName(){
-        return StringUtils.join(" ", fistName, lastName);
+        return StringUtils.join(" ", firstName, lastName);
     }
 
     public boolean isValid(){
         return Objects.nonNull(this.idNumber)
-        &&StringUtils.isNotBlank(this.getFistName())
-        &&Objects.nonNull(this.socialInsuranceNumber)
+        &&StringUtils.isNotBlank(this.getFullName())
+        &&StringUtils.isNotBlank(this.socialInsuranceNumber)
         &&Objects.nonNull(this.dob);
     }
-
-    
 }

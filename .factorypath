@@ -45,4 +45,5 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/com/sun/xml/fastinfoset/FastInfoset/1.2.15/FastInfoset-1.2.15.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/commons/commons-text/1.9/commons-text-1.9.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/commons/commons-lang3/3.11/commons-lang3-3.11.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/jakarta/platform/jakarta.jakartaee-api/8.0.0/jakarta.jakartaee-api-8.0.0.jar" enabled="true" runInBatchMode="false"/>
 </factorypath>

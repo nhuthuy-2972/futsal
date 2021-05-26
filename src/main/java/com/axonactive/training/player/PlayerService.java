@@ -14,6 +14,13 @@ public class PlayerService {
 
     public void add(Player newPlayer){
         validate(newPlayer);
+        // List<Player> ePlayers = this.findByInsuranceNumber(newPlayer.getSocialInsuranceNumber());
+        
+        // if(ePlayers.size() > 0)
+        // {
+        //     throw new IllegalArgumentException("Insurance number must be unique");
+        // }
+        
         this.playerEntity.persist(newPlayer);
     }
 
@@ -26,7 +33,6 @@ public class PlayerService {
         persistedPlayer.updatePlayer(newPlayer);
         this.playerEntity.merge(persistedPlayer);
     }
-
 
     public void delete(Long id){
         this.playerEntity.remove(this.playerEntity.find(Player.class, id));
@@ -44,6 +50,7 @@ public class PlayerService {
     public  List<Player> findByInsuranceNumber(String insuranceNumber) {
         TypedQuery<Player> query = this.playerEntity.createNamedQuery(Player.GET_BY_INSURANCE_NUMBER, Player.class);
         query.setParameter("playerInsuranceNumber", insuranceNumber);
+        this.playerEntity.clear();
         return query.getResultList();
     }
 
@@ -53,7 +60,7 @@ public class PlayerService {
             throw new IllegalArgumentException("Player is missing");
         }
 
-        if (!player.isValid()) {
+        if (!player.isValid1()) {
             throw new IllegalArgumentException("Player data is missing or invalid");
         }
     }

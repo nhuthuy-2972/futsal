@@ -13,11 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-
 import org.apache.commons.lang3.StringUtils;
-
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -26,12 +23,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode
 @Entity
 @Table(name = "tbl_player")
 @NamedQueries({
     @NamedQuery(name = Player.GET_ALL_QUERY, query = "SELECT s FROM Player s"),
-    @NamedQuery(name = Player.GET_BY_INSURANCE_NUMBER, query = "SELECT s FROM Player s WHERE s.socialInsuranceNumber =:playerInsuranceNumber")
+    @NamedQuery(name = Player.GET_BY_INSURANCE_NUMBER, query = "SELECT s FROM Player s WHERE s.socialInsuranceNumber = :playerInsuranceNumber")
 })
 public class Player {
 
@@ -45,8 +41,8 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "code", length = 10, nullable = false, unique = true)
-    private String idNumber;
+    // @Column(name = "code", length = 10, nullable = false, unique = true)
+    // private String idNumber;
     
     @Column(name = "first_name", length = 20, nullable = false)
     private String firstName;
@@ -57,15 +53,15 @@ public class Player {
     @Column(name = "d_o_b", columnDefinition = "DATE")
     private LocalDate dob;
 
+    @InsuraneUniqued 
     @Column(name = "socail_insurance_number" , nullable = false,unique = true)
     private String socialInsuranceNumber;
 
     @Convert(converter = GenderPersistenceConverter.class)
     private Gender gender = Gender.UNKNOWN;
 
-    public Player(String idNumber, String fistName, String lastName, LocalDate dob, String socialInsuranceNumber,
+    public Player( String fistName, String lastName, LocalDate dob, String socialInsuranceNumber,
             Gender gender ) {
-        this.idNumber = idNumber;
         this.firstName = fistName;
         this.lastName = lastName;
         this.dob = dob;
@@ -94,12 +90,11 @@ public class Player {
         return StringUtils.join(" ", firstName, lastName);
     }
 
-    public boolean isValid(){
-        return Objects.nonNull(this.idNumber)
-        &&StringUtils.isNotBlank(this.getFullName())
+    public boolean isValid1(){
+        return 
+        StringUtils.isNotBlank(this.getFirstName())
+        &&StringUtils.isNotBlank(this.getLastName())
         &&StringUtils.isNotBlank(this.socialInsuranceNumber)
         &&Objects.nonNull(this.dob);
     }
-
-    
 }

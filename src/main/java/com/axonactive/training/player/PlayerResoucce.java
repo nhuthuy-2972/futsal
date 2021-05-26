@@ -2,9 +2,10 @@ package com.axonactive.training.player;
 
 import java.net.URI;
 import java.util.List;
-
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import javax.validation.ConstraintViolationException;
+import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,42 +20,53 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
+import javax.ws.rs.core.Response.Status;
 
 @Path("players")
 @Stateless
 public class PlayerResoucce extends WebApplicationException{
     
-    @Context
-    private UriInfo uriInfo;
-
     @Inject
-    private PlayerService playerService;
+    PlayerService playerService;
+
+    @Context
+    UriInfo uriInfo;
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response addPlayer(Player newPlayer){
-        playerService.add(newPlayer);
+    public Response add(Player newPlayer){
+        try {
+            playerService.add(newPlayer);
+        } catch (IllegalArgumentException  e) {
+            throw new PlayerException(e.getMessage(), Status.BAD_REQUEST);
+        }catch(ConstraintViolationException eonstraintViolationException){
+            throw new PlayerException(eonstraintViolationException.getConstraintViolations().toString(), Status.CONFLICT);
+        }
         URI playerUri = uriInfo.getAbsolutePathBuilder().path(newPlayer.getId().toString()).build();
         return Response.created(playerUri).entity(playerUri.toString()).build();
     }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Player> getAllPlayer(){
+    public List<Player> findAll(){
         return playerService.findALl();
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Player getPlayerById( @PathParam("id") Long id){
-      
-        return playerService.find(id);
+    public Player findById( @PathParam("id") Long id){
+        Player player = this.playerService.find(id);
+        
+        if(player == null){
+            throw new PlayerException("Player does not exits", Status.BAD_REQUEST);
+        }
+        return player;
     }
 
     @DELETE
     @Path("{id}")
-    public Response deletePlayerById(@PathParam("id") Long id) {
+    public Response deleteById(@PathParam("id") Long id) {
         this.playerService.delete(id);
         return Response.ok().build();
     }
@@ -63,7 +75,7 @@ public class PlayerResoucce extends WebApplicationException{
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public Response updatePlayer(@PathParam("id") Long id ,Player newPlayer) {
+    public Response update(@PathParam("id") Long id ,Player newPlayer) {
         this.playerService.update(id,newPlayer);
         return Response.ok().build();
     }
@@ -71,7 +83,7 @@ public class PlayerResoucce extends WebApplicationException{
     @GET
     @Path("search")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Player> getPlayerByDOB( @QueryParam("insuranceNumber") String insuranceNumber){
+    public List<Player> getByDOB( @QueryParam("insuranceNumber") String insuranceNumber){
         return playerService.findByInsuranceNumber(insuranceNumber);
     }
 }

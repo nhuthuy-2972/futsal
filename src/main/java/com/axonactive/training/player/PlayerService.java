@@ -54,6 +54,13 @@ public class PlayerService {
         return query.getResultList();
     }
 
+    public  List<Player> findByFirsrName(String firstName) {
+        TypedQuery<Player> query = this.playerEntity.createNamedQuery(Player.GET_BY_FIRST_NAME, Player.class);
+        query.setParameter("firstName", firstName);
+        this.playerEntity.clear();
+        return query.getResultList();
+    }
+
     private void validate(Player player)
     {
         if (Objects.isNull(player)){

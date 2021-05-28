@@ -10,9 +10,14 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+
+import com.axonactive.training.team.Team;
+
 import org.apache.commons.lang3.StringUtils;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -27,7 +32,8 @@ import lombok.Setter;
 @Table(name = "tbl_player")
 @NamedQueries({
     @NamedQuery(name = Player.GET_ALL_QUERY, query = "SELECT s FROM Player s"),
-    @NamedQuery(name = Player.GET_BY_INSURANCE_NUMBER, query = "SELECT s FROM Player s WHERE s.socialInsuranceNumber = :playerInsuranceNumber")
+    @NamedQuery(name = Player.GET_BY_INSURANCE_NUMBER, query = "SELECT s FROM Player s WHERE s.socialInsuranceNumber = :playerInsuranceNumber"),
+    @NamedQuery(name = Player.GET_BY_FIRST_NAME, query = "SELECT s FROM Player s WHERE s.firstName = :firstName")
 })
 public class Player {
 
@@ -35,7 +41,9 @@ public class Player {
 
     public static final String GET_ALL_QUERY = QUALIFIER + "getAll";
     
-    public static final String GET_BY_INSURANCE_NUMBER = QUALIFIER + "getByDob";
+    public static final String GET_BY_INSURANCE_NUMBER = QUALIFIER + "getByInsurance";
+
+    public static final String GET_BY_FIRST_NAME = QUALIFIER + "getByFirstName";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -56,6 +64,10 @@ public class Player {
     @InsuraneUniqued 
     @Column(name = "socail_insurance_number" , nullable = false,unique = true)
     private String socialInsuranceNumber;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "play_for_id",nullable = false)
+    private Team playFor;
 
     @Convert(converter = GenderPersistenceConverter.class)
     private Gender gender = Gender.UNKNOWN;
@@ -87,7 +99,7 @@ public class Player {
     }
 
     public String getFullName(){
-        return StringUtils.join(" ", firstName, lastName);
+        return firstName + " " + lastName;
     }
 
     public boolean isValid1(){

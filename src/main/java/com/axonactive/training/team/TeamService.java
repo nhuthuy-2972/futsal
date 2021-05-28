@@ -61,7 +61,6 @@ public class TeamService {
         if (Objects.isNull(team)) {
             throw new IllegalArgumentException("Team is missing");
         }
-
         if (!team.isValid()) {
             throw new IllegalArgumentException("Team data is missing or invalid");
         }

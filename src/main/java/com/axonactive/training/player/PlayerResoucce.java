@@ -2,10 +2,10 @@ package com.axonactive.training.player;
 
 import java.net.URI;
 import java.util.List;
+
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.validation.ConstraintViolationException;
-import javax.validation.Valid;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -19,8 +19,8 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.core.Response.Status;
+import javax.ws.rs.core.UriInfo;
 
 @Path("players")
 @Stateless
@@ -50,6 +50,14 @@ public class PlayerResoucce extends WebApplicationException{
     @Produces(MediaType.APPLICATION_JSON)
     public List<Player> findAll(){
         return playerService.findALl();
+    //     return Response.status(200)
+    //     .header("Access-Control-Allow-Origin", "*")
+    //     .header("Access-Control-Allow-Credentials", "true")
+    //   .header("Access-Control-Allow-Headers",
+    //     "origin, content-type, accept, authorization")
+    //   .header("Access-Control-Allow-Methods", 
+    //     "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+    //     .entity(playerService.findALl()).build();
     }
 
     @GET
@@ -83,7 +91,14 @@ public class PlayerResoucce extends WebApplicationException{
     @GET
     @Path("search")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Player> getByDOB( @QueryParam("insuranceNumber") String insuranceNumber){
+    public List<Player> findByInsuranceNumber( @QueryParam("insuranceNumber") String insuranceNumber){
         return playerService.findByInsuranceNumber(insuranceNumber);
     }
+
+    // @GET
+    // @Path("search")
+    // @Produces(MediaType.APPLICATION_JSON)
+    // public List<Player> findByFirstName( @QueryParam("firstName") String insuranceNumber){
+    //     return playerService.findByInsuranceNumber(insuranceNumber);
+    // }
 }

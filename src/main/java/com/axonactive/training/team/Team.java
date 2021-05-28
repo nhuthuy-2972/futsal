@@ -3,12 +3,14 @@ package com.axonactive.training.team;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import javax.json.bind.annotation.JsonbTransient;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -31,7 +33,7 @@ import lombok.Setter;
 @Table(name = "tbl_team")
 @NamedQueries({ @NamedQuery(name = Team.GET_ALL_QUERY, query = "SELECT s FROM Team s"),
         @NamedQuery(name = Team.GET_BY_NAME, query = "SELECT s FROM Team s WHERE s.name =:teamName") })
-public class Team {
+public class Team  {
 
     public static final String QUALIFIER = "com.axonactive.training.team.";
 
@@ -39,9 +41,9 @@ public class Team {
 
     public static final String GET_BY_NAME = QUALIFIER + "getByTeamName";
 
-    private final int MAX_TEAM_SIZE = 13;
+    private static final int MAX_TEAM_SIZE = 13;
 
-    private final int MIN_TEAM_SIZE = 5;
+    private static final int MIN_TEAM_SIZE = 5;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,13 +54,13 @@ public class Team {
     @Size(max = 50)
     private String name;
 
-    @OneToMany
-    @JoinColumn(name = "team_id", nullable = true)
+    @OneToMany(mappedBy = "playFor",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonbTransient
     private List<Player> players = new ArrayList<>();
 
     public Boolean isValidNumberOfPlayer() {
         int teamSize = this.players.size();
-        return teamSize < this.MAX_TEAM_SIZE && teamSize > this.MIN_TEAM_SIZE;
+        return teamSize < Team.MAX_TEAM_SIZE && teamSize > Team.MIN_TEAM_SIZE;
     }
 
     public int getSize() {
@@ -69,11 +71,11 @@ public class Team {
     }
 
     public boolean isValid() {
-        return Objects.nonNull(this.name) && this.isValidNumberOfPlayer();
+        return Objects.nonNull(this.name);
     }
 
     public boolean isNumberOfTeamLessThanMaxTeamSize() {
-        return this.players.size() < this.MAX_TEAM_SIZE;
+        return this.players.size() < Team.MAX_TEAM_SIZE;
     }
 
     public void updateTeam(Team newTeam) {

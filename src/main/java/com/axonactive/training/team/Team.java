@@ -31,9 +31,9 @@ import lombok.Setter;
 @EqualsAndHashCode
 @Entity
 @Table(name = "tbl_team")
-@NamedQueries({ @NamedQuery(name = Team.GET_ALL_QUERY, query = "SELECT s FROM Team s"),
-        @NamedQuery(name = Team.GET_BY_NAME, query = "SELECT s FROM Team s WHERE s.name =:teamName") })
-public class Team  {
+@NamedQueries({ @NamedQuery(name = Team.GET_ALL_QUERY, query = "SELECT t FROM Team t"),
+        @NamedQuery(name = Team.GET_BY_NAME, query = "SELECT t FROM Team t WHERE t.name =:teamName") })
+public class Team {
 
     public static final String QUALIFIER = "com.axonactive.training.team.";
 
@@ -54,7 +54,8 @@ public class Team  {
     @Size(max = 50)
     private String name;
 
-    @OneToMany(mappedBy = "playFor",cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "playFor", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+
     @JsonbTransient
     private List<Player> players = new ArrayList<>();
 

@@ -1,5 +1,6 @@
 package com.axonactive.training.player;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.Objects;
@@ -30,20 +31,21 @@ import lombok.Setter;
 @NoArgsConstructor
 @Entity
 @Table(name = "tbl_player")
-@NamedQueries({
-    @NamedQuery(name = Player.GET_ALL_QUERY, query = "SELECT s FROM Player s"),
-    @NamedQuery(name = Player.GET_BY_INSURANCE_NUMBER, query = "SELECT s FROM Player s WHERE s.socialInsuranceNumber = :playerInsuranceNumber"),
-    @NamedQuery(name = Player.GET_BY_FIRST_NAME, query = "SELECT s FROM Player s WHERE s.firstName = :firstName")
-})
-public class Player {
+@NamedQueries({ @NamedQuery(name = Player.GET_ALL_QUERY, query = "SELECT s FROM Player s"),
+        @NamedQuery(name = Player.GET_BY_INSURANCE_NUMBER, query = "SELECT s FROM Player s WHERE s.socialInsuranceNumber = :playerInsuranceNumber"),
+        @NamedQuery(name = Player.GET_BY_FIRST_NAME, query = "SELECT s FROM Player s WHERE s.firstName = :firstName"),
+        @NamedQuery(name = Player.GET_ALL_PLAYER_PLAY_FOR, query = "SELECT p FROM Player p WHERE p.playFor.id =:teamId") })
+public class Player implements Serializable {
 
     public static final String QUALIFIER = "com.axonactive.training.player.";
 
     public static final String GET_ALL_QUERY = QUALIFIER + "getAll";
-    
+
     public static final String GET_BY_INSURANCE_NUMBER = QUALIFIER + "getByInsurance";
 
     public static final String GET_BY_FIRST_NAME = QUALIFIER + "getByFirstName";
+
+    public static final String GET_ALL_PLAYER_PLAY_FOR = QUALIFIER + "getByPlayFor";
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +53,7 @@ public class Player {
 
     // @Column(name = "code", length = 10, nullable = false, unique = true)
     // private String idNumber;
-    
+
     @Column(name = "first_name", length = 20, nullable = false)
     private String firstName;
 
@@ -61,19 +63,18 @@ public class Player {
     @Column(name = "d_o_b", columnDefinition = "DATE")
     private LocalDate dob;
 
-    @InsuraneUniqued 
-    @Column(name = "socail_insurance_number" , nullable = false,unique = true)
+    @InsuraneUniqued
+    @Column(name = "socail_insurance_number", nullable = false, unique = true)
     private String socialInsuranceNumber;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name = "play_for_id",nullable = false)
+    @JoinColumn(name = "play_for_id", nullable = false)
     private Team playFor;
 
     @Convert(converter = GenderPersistenceConverter.class)
     private Gender gender = Gender.UNKNOWN;
 
-    public Player( String fistName, String lastName, LocalDate dob, String socialInsuranceNumber,
-            Gender gender ) {
+    public Player(String fistName, String lastName, LocalDate dob, String socialInsuranceNumber, Gender gender) {
         this.firstName = fistName;
         this.lastName = lastName;
         this.dob = dob;
@@ -81,7 +82,7 @@ public class Player {
         this.gender = gender;
     }
 
-    public void updatePlayer(Player newPlayer){
+    public void updatePlayer(Player newPlayer) {
         this.firstName = newPlayer.firstName;
         this.lastName = newPlayer.lastName;
         this.dob = newPlayer.dob;
@@ -89,8 +90,8 @@ public class Player {
         this.gender = newPlayer.gender;
     }
 
-    public int getAge(){
-        if(Objects.isNull(this.dob)){
+    public int getAge() {
+        if (Objects.isNull(this.dob)) {
             throw new IllegalArgumentException("Date of birth of the player is missing");
         }
 
@@ -98,15 +99,12 @@ public class Player {
         return Period.between(this.dob, currentDate).getYears();
     }
 
-    public String getFullName(){
+    public String getFullName() {
         return firstName + " " + lastName;
     }
 
-    public boolean isValid1(){
-        return 
-        StringUtils.isNotBlank(this.getFirstName())
-        &&StringUtils.isNotBlank(this.getLastName())
-        &&StringUtils.isNotBlank(this.socialInsuranceNumber)
-        &&Objects.nonNull(this.dob);
+    public boolean isValid1() {
+        return StringUtils.isNotBlank(this.getFirstName()) && StringUtils.isNotBlank(this.getLastName())
+                && StringUtils.isNotBlank(this.socialInsuranceNumber) && Objects.nonNull(this.dob);
     }
 }

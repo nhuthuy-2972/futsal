@@ -24,8 +24,8 @@ import javax.ws.rs.core.UriInfo;
 
 @Path("players")
 @Stateless
-public class PlayerResoucce extends WebApplicationException{
-    
+public class PlayerResoucce extends WebApplicationException {
+
     @Inject
     PlayerService playerService;
 
@@ -34,13 +34,14 @@ public class PlayerResoucce extends WebApplicationException{
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
-    public Response add(Player newPlayer){
+    public Response add(Player newPlayer) {
         try {
             playerService.add(newPlayer);
-        } catch (IllegalArgumentException  e) {
+        } catch (IllegalArgumentException e) {
             throw new PlayerException(e.getMessage(), Status.BAD_REQUEST);
-        }catch(ConstraintViolationException eonstraintViolationException){
-            throw new PlayerException(eonstraintViolationException.getConstraintViolations().toString(), Status.CONFLICT);
+        } catch (ConstraintViolationException eonstraintViolationException) {
+            throw new PlayerException(eonstraintViolationException.getConstraintViolations().toString(),
+                    Status.CONFLICT);
         }
         URI playerUri = uriInfo.getAbsolutePathBuilder().path(newPlayer.getId().toString()).build();
         return Response.created(playerUri).entity(playerUri.toString()).build();
@@ -48,25 +49,25 @@ public class PlayerResoucce extends WebApplicationException{
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Player> findAll(){
+    public List<Player> findAll() {
         return playerService.findALl();
-    //     return Response.status(200)
-    //     .header("Access-Control-Allow-Origin", "*")
-    //     .header("Access-Control-Allow-Credentials", "true")
-    //   .header("Access-Control-Allow-Headers",
-    //     "origin, content-type, accept, authorization")
-    //   .header("Access-Control-Allow-Methods", 
-    //     "GET, POST, PUT, DELETE, OPTIONS, HEAD")
-    //     .entity(playerService.findALl()).build();
+        // return Response.status(200)
+        // .header("Access-Control-Allow-Origin", "*")
+        // .header("Access-Control-Allow-Credentials", "true")
+        // .header("Access-Control-Allow-Headers",
+        // "origin, content-type, accept, authorization")
+        // .header("Access-Control-Allow-Methods",
+        // "GET, POST, PUT, DELETE, OPTIONS, HEAD")
+        // .entity(playerService.findALl()).build();
     }
 
     @GET
     @Path("{id}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Player findById( @PathParam("id") Long id){
+    public Player findById(@PathParam("id") Long id) {
         Player player = this.playerService.find(id);
-        
-        if(player == null){
+
+        if (player == null) {
             throw new PlayerException("Player does not exits", Status.BAD_REQUEST);
         }
         return player;
@@ -79,26 +80,26 @@ public class PlayerResoucce extends WebApplicationException{
         return Response.ok().build();
     }
 
-
     @PUT
     @Consumes(MediaType.APPLICATION_JSON)
     @Path("{id}")
-    public Response update(@PathParam("id") Long id ,Player newPlayer) {
-        this.playerService.update(id,newPlayer);
+    public Response update(@PathParam("id") Long id, Player newPlayer) {
+        this.playerService.update(id, newPlayer);
         return Response.ok().build();
     }
 
     @GET
     @Path("search")
     @Produces(MediaType.APPLICATION_JSON)
-    public List<Player> findByInsuranceNumber( @QueryParam("insuranceNumber") String insuranceNumber){
+    public List<Player> findByInsuranceNumber(@QueryParam("insuranceNumber") String insuranceNumber) {
         return playerService.findByInsuranceNumber(insuranceNumber);
     }
 
-    // @GET
-    // @Path("search")
-    // @Produces(MediaType.APPLICATION_JSON)
-    // public List<Player> findByFirstName( @QueryParam("firstName") String insuranceNumber){
-    //     return playerService.findByInsuranceNumber(insuranceNumber);
-    // }
+    @GET
+    @Path("playfor")
+    @Produces(MediaType.APPLICATION_JSON)
+    public List<Player> findByFirstName(@QueryParam("pfid") Long id) {
+        System.out.println("Aass");
+        return playerService.findAllPlayerPlayFor(id);
+    }
 }
